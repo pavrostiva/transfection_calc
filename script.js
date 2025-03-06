@@ -18,6 +18,17 @@ function calculate() {
     let VG = totalPlasmids * plasmidLength * 1e6;  // Количество вирусных геномов (VG)
     let mixVolume = VG / (10 * 1e6);  // Примерная формула для объема микса (ml)
 
+    // Отладка: выводим значения в консоль
+    console.log(`Длина плазмиды: ${plasmidLength}`);
+    console.log(`Количество ДНК: ${dnaAmount}`);
+    console.log(`Соотношение плазмид: ${plasmidRatio}`);
+    console.log(`Объем наработки: ${volumeWork}`);
+    console.log(`Коэффициент перевода: ${coef}`);
+    console.log(`Объем КЖ: ${KJ}`);
+    console.log(`Суммарное количество плазмид: ${totalPlasmids}`);
+    console.log(`Количество вирусных геномов: ${VG}`);
+    console.log(`Объем микса: ${mixVolume}`);
+
     // Вывод результатов в таблицу
     document.getElementById("output_KJ").textContent = KJ.toFixed(2) + " мл";
     document.getElementById("output_total_plasmids").textContent = totalPlasmids.toFixed(2) + " нг";
