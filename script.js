@@ -6,11 +6,17 @@ function calculate() {
     let volumeWork = parseFloat(document.getElementById("volume_work").value);
     let coef = parseFloat(document.getElementById("coef").value);
 
+    // Проверка на корректность значений
+    if (isNaN(plasmidLength) || isNaN(dnaAmount) || isNaN(plasmidRatio) || isNaN(volumeWork) || isNaN(coef)) {
+        alert("Пожалуйста, убедитесь, что все поля заполнены корректно.");
+        return;
+    }
+
     // 🔢 Расчеты
-    let KJ = volumeWork * coef;  // Объем КЖ
-    let totalPlasmids = dnaAmount * plasmidRatio;  // Суммарное количество плазмид
-    let VG = totalPlasmids * plasmidLength * 1e6;  // Количество вирусных геномов
-    let mixVolume = VG / (10 * 1e6);  // Примерная формула для объема микса
+    let KJ = volumeWork * coef;  // Объем КЖ (ml)
+    let totalPlasmids = dnaAmount * plasmidRatio;  // Суммарное количество плазмид (нг)
+    let VG = totalPlasmids * plasmidLength * 1e6;  // Количество вирусных геномов (VG)
+    let mixVolume = VG / (10 * 1e6);  // Примерная формула для объема микса (ml)
 
     // Вывод результатов в таблицу
     document.getElementById("output_KJ").textContent = KJ.toFixed(2) + " мл";
