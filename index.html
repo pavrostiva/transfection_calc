@@ -134,29 +134,42 @@
             // Расчет объема КЖ (ml)
             let KJ = volumeWork * coef * volumeAmount;
 
-            // Расчет суммарного количества ДНК для всех трех плазмид с учетом их соотношений
-            let totalDNA = (plasmidHelperConcentration * plasmidRatio[0]) + 
-                           (plasmidCapsidConcentration * plasmidRatio[1]) + 
-                           (plasmidTransgeneConcentration * plasmidRatio[2]);
+            // Для каждой плазмиды рассчитаем её массу на основе концентрации и длины
+            const dnaMassCoefficient = 650;  // Коэффициент для ДНК (г/моль на 1 основание)
+
+            function calculatePlasmidMass(length, concentration) {
+                let molecularWeight = length * dnaMassCoefficient; // масса молекулы в г/моль
+                let massPerPicomole = molecularWeight / 1e12; // масса на пикомоль в граммах
+                return massPerPicomole * concentration * 1e6; // в мкг (масса * концентрация)
+            }
+
+            // Расчет массы для каждой плазмиды
+            let plasmidHelperMass = calculatePlasmidMass(plasmidHelperLength, plasmidHelperConcentration);
+            let plasmidCapsidMass = calculatePlasmidMass(plasmidCapsidLength, plasmidCapsidConcentration);
+            let plasmidTransgeneMass = calculatePlasmidMass(plasmidTransgeneLength, plasmidTransgeneConcentration);
+
+            // Общее количество ДНК
+            let totalDNA = plasmidHelperMass + plasmidCapsidMass + plasmidTransgeneMass;
 
             // Расчет общего количества вирусных геномов (VG) и объема микса
             let VG = totalDNA * 1e6;  // Примерная формула для количества вирусных геномов (VG)
-            let mixVolume = VG / (10 * 1e6);  // Примерная формула для объема микса (ml)
+            let mixVolume = VG / (10 * 1e6);  // Примерная формула для объема трансфекционного микса
 
-            // Вывод результатов
-            document.getElementById("output_KJ").textContent = KJ.toFixed(2) + " мл";
-            document.getElementById("output_total_dna").textContent = totalDNA.toFixed(2) + " нг";
-            document.getElementById("output_VG").textContent = VG.toExponential(2) + " VG";
-            document.getElementById("output_mix").textContent = mixVolume.toFixed(2) + " мл";
+            // Выводим результаты
+            document.getElementById("output_KJ").textContent = KJ + " мл";
+            document.getElementById("output_total_dna").textContent = totalDNA + " мкг";
+            document.getElementById("output_VG").textContent = VG + " VG";
+            document.getElementById("output_mix").textContent = mixVolume + " мл";
 
-            // Вывод длины плазмид
+            // Обновляем значения длины для справки
             document.getElementById("output_plasmid_helper_length").textContent = plasmidHelperLength + " bp";
             document.getElementById("output_plasmid_capsid_length").textContent = plasmidCapsidLength + " bp";
             document.getElementById("output_plasmid_transgene_length").textContent = plasmidTransgeneLength + " bp";
         }
 
-        // Привязка события к кнопке
+        // Слушатель для кнопки расчета
         document.getElementById("calculate-btn").addEventListener("click", calculate);
     </script>
+
 </body>
 </html>
