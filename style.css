@@ -2,41 +2,65 @@ body {
     font-family: Arial, sans-serif;
     text-align: center;
     padding: 20px;
+    background-color: #f4f4f9;
+    color: #333;
 }
 
-form {
+h1 {
+    color: #2c3e50;
+}
+
+.input-container {
     margin-bottom: 20px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    margin: 0 auto;
 }
 
-label {
+.input-container label {
     display: block;
-    margin: 10px 0;
+    margin: 10px 0 5px;
+    font-weight: bold;
 }
 
-input {
-    width: 100px;
-    padding: 5px;
-    margin-left: 10px;
+.input-container input,
+.input-container select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
 button {
-    padding: 10px;
+    padding: 10px 20px;
     margin-top: 10px;
     cursor: pointer;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
 }
 
-table {
+button:hover {
+    background-color: #2980b9;
+}
+
+.output-container {
+    margin-top: 30px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
     margin: 20px auto;
-    border-collapse: collapse;
-    width: 50%;
 }
 
-th, td {
-    border: 1px solid black;
-    padding: 10px;
-}
-
-/* 🔹 Добавляем отступ между полями */
-.spacer {
-    height: 10px;
+.output-container p {
+    margin: 10px 0;
+    font-size: 16px;
 }

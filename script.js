@@ -1,54 +1,55 @@
+// Данные о плазмидах
+const plasmidsData = {
+    "pAAV-Helper": { length: 11600, concentration: 1.08 },
+    "AAV2/6": { length: 7300, concentration: 2.74 },
+    "AAV-CMV-EGFP": { length: 5200, concentration: 1.63 }
+};
+
+// Коэффициенты для типов объемов
+const coefficients = {
+    "T175": 1,
+    "КРУГЛЫЕ 10см": 0.6,
+    "5-level cellstack": 18
+};
+
+// Объем среды для каждого типа
+const mediumVolume = {
+    "T175": 30,
+    "КРУГЛЫЕ 10см": 8,
+    "5-level cellstack": 3180
+};
+
 // Функция для расчета
 function calculate() {
     // Получаем значения из полей ввода
-    let plasmidHelperConcentration = parseFloat(document.getElementById("plasmid_helper_concentration").value);
-    let plasmidCapsidConcentration = parseFloat(document.getElementById("plasmid_capsid_concentration").value);
-    let plasmidTransgeneConcentration = parseFloat(document.getElementById("plasmid_transgene_concentration").value);
+    const plasmidHelper = document.getElementById("plasmid_helper").value;
+    const plasmidCapsid = document.getElementById("plasmid_capsid").value;
+    const plasmidTransgene = document.getElementById("plasmid_transgene").value;
 
-    // Парсим соотношение плазмид
-    let plasmidRatio = document.getElementById("plasmid_ratio").value.split(':').map(r => parseFloat(r.trim()));
+    const plasmidHelperConcentration = plasmidsData[plasmidHelper].concentration;
+    const plasmidCapsidConcentration = plasmidsData[plasmidCapsid].concentration;
+    const plasmidTransgeneConcentration = plasmidsData[plasmidTransgene].concentration;
 
-    // Проверка на корректность значений
-    if (isNaN(plasmidHelperConcentration) || isNaN(plasmidCapsidConcentration) || isNaN(plasmidTransgeneConcentration) || plasmidRatio.length !== 3) {
-        alert("Пожалуйста, убедитесь, что все поля заполнены корректно.");
-        return;
-    }
+    const plasmidRatio = document.getElementById("plasmid_ratio").value.split(':').map(r => parseFloat(r.trim()));
 
-    // Получаем выбранный тип емкости для наработки
-    let volumeType = document.getElementById("volume_type").value;
-    let coef = 0;
+    const volumeType = document.getElementById("volume_type").value;
+    const coef = coefficients[volumeType];
+    const volumeWork = mediumVolume[volumeType];
+    const volumeAmount = parseInt(document.getElementById("volume_amount").value);
 
-    // Устанавливаем коэффициент перевода в зависимости от типа емкости
-    if (volumeType === "T175") {
-        coef = 1;
-    } else if (volumeType === "КРУГЛЫЕ 10см") {
-        coef = 0.6;
-    } else if (volumeType === "5-level cellstack") {
-        coef = 18;
-    }
+    // Расчет объема КЖ
+    const KJ = volumeWork * coef * volumeAmount;
 
-    // Устанавливаем значение коэффициента перевода в поле
-    document.getElementById("coef").value = coef;
+    // Расчет суммарного количества ДНК
+    const totalDNA = (plasmidHelperConcentration * plasmidRatio[0]) +
+                     (plasmidCapsidConcentration * plasmidRatio[1]) +
+                     (plasmidTransgeneConcentration * plasmidRatio[2]);
 
-    let volumeWork = parseFloat(document.getElementById("volume_work_ml").value);
+    // Расчет общего количества вирусных геномов (VG)
+    const VG = totalDNA * 1e6;
 
-    // Проверка на корректность значений
-    if (isNaN(volumeWork) || isNaN(coef)) {
-        alert("Пожалуйста, убедитесь, что объем и коэффициент перевода введены корректно.");
-        return;
-    }
-
-    // Расчет объема КЖ (ml)
-    let KJ = volumeWork * coef;  
-
-    // Расчет суммарного количества ДНК для всех трех плазмид с учетом их соотношений
-    let totalDNA = (plasmidHelperConcentration * plasmidRatio[0]) + 
-                   (plasmidCapsidConcentration * plasmidRatio[1]) + 
-                   (plasmidTransgeneConcentration * plasmidRatio[2]);
-
-    // Расчет общего количества вирусных геномов (VG) и объема микса
-    let VG = totalDNA * 1e6;  // Примерная формула для количества вирусных геномов (VG)
-    let mixVolume = VG / (10 * 1e6);  // Примерная формула для объема микса (ml)
+    // Расчет объема микса
+    const mixVolume = VG / (10 * 1e6);
 
     // Вывод результатов
     document.getElementById("output_KJ").textContent = KJ.toFixed(2) + " мл";
