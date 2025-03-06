@@ -9,3 +9,8 @@ This project helps calculate transfection efficiency for various cell lines.
 
 ## How to Use
 Run the script and input the required parameters.
+
+## Authors
+
+Formulas - Alisa Potapova
+Code - Pavel Ivanov-Rostovtsev 
