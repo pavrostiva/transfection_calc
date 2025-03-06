@@ -4,22 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Калькулятор AAV</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <h1>Калькулятор AAV</h1>
     
-    <input type="file" id="upload" accept=".xlsx">
-    
-    <h2>Sheet1 (Вычисления)</h2>
-    <table id="sheet1"></table>
+    <form id="calc-form">
+        <label>📏 Длина плазмиды (bp):
+            <input type="number" id="plasmid_length" value="7300">
+        </label>
 
-    <h2>Плазмиды</h2>
-    <table id="plasmids"></table>
+        <label>🔗 Соотношение плазмид:
+            <input type="number" id="plasmid_ratio" value="1">
+        </label>
 
-    <h2>Трансдукция ААВ</h2>
-    <table id="transduction"></table>
+        <label>🧪 Объем наработки (мл):
+            <input type="number" id="volume_work" value="30">
+        </label>
+
+        <label>🔄 Коэффициент перевода (см² → мл):
+            <input type="number" id="coef" value="0.17">
+        </label>
+
+        <button type="button" onclick="calculate()">🔢 Рассчитать</button>
+    </form>
+
+    <h2>📊 Результаты</h2>
+    <table id="result-table">
+        <thead>
+            <tr>
+                <th>Параметр</th>
+                <th>Значение</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>Объем КЖ</td><td id="output_KJ"></td></tr>
+            <tr><td>Количество вирусных геномов</td><td id="output_VG"></td></tr>
+            <tr><td>Объем плазмидного микса</td><td id="output_mix"></td></tr>
+        </tbody>
+    </table>
 
     <script src="script.js"></script>
 </body>
