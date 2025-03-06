@@ -24,11 +24,18 @@
         <label for="plasmid_ratio">🔗 Соотношение плазмид (pHelper : Capsid : Transgene):</label>
         <input type="text" id="plasmid_ratio" value="1:1:1">
 
-        <label for="volume_work">🧪 Объем наработки (мл):</label>
-        <input type="number" id="volume_work" value="30" step="0.1">
+        <label for="volume_work">🧪 Объем наработки (выберите тип):</label>
+        <select id="volume_type">
+            <option value="T175">T175 (коэффициент перевода = 1)</option>
+            <option value="КРУГЛЫЕ 10см">КРУГЛЫЕ 10см (коэффициент перевода = 0.6)</option>
+            <option value="5-level cellstack">5-level cellstack (коэффициент перевода = 18)</option>
+        </select>
 
         <label for="coef">🔄 Коэффициент перевода (см² → мл):</label>
-        <input type="number" id="coef" value="0.17" step="0.01">
+        <input type="text" id="coef" disabled>
+
+        <label for="volume_work_ml">🧪 Объем наработки (мл):</label>
+        <input type="number" id="volume_work_ml" value="30" step="0.1">
 
         <button type="button" id="calculate-btn">🔢 Рассчитать</button>
     </div>

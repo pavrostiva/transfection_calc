@@ -14,8 +14,23 @@ function calculate() {
         return;
     }
 
-    let volumeWork = parseFloat(document.getElementById("volume_work").value);
-    let coef = parseFloat(document.getElementById("coef").value);
+    // Получаем выбранный тип емкости для наработки
+    let volumeType = document.getElementById("volume_type").value;
+    let coef = 0;
+
+    // Устанавливаем коэффициент перевода в зависимости от типа емкости
+    if (volumeType === "T175") {
+        coef = 1;
+    } else if (volumeType === "КРУГЛЫЕ 10см") {
+        coef = 0.6;
+    } else if (volumeType === "5-level cellstack") {
+        coef = 18;
+    }
+
+    // Устанавливаем значение коэффициента перевода в поле
+    document.getElementById("coef").value = coef;
+
+    let volumeWork = parseFloat(document.getElementById("volume_work_ml").value);
 
     // Проверка на корректность значений
     if (isNaN(volumeWork) || isNaN(coef)) {
