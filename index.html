@@ -4,55 +4,71 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Калькулятор трансфекции AAV</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Стили для улучшения отображения формы */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .input-container {
+            margin-bottom: 20px;
+        }
+        .input-container label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .input-container input, .input-container select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+        .output-container {
+            margin-top: 30px;
+        }
+    </style>
 </head>
 <body>
+
     <h1>Калькулятор трансфекции AAV</h1>
 
     <!-- Ввод данных для расчета -->
     <div class="input-container">
-        <!-- Выбор плазмид и их размеров -->
-        <label for="plasmid_helper">📏 Плазмида pAAV-Helper:</label>
-        <select id="plasmid_helper">
-            <option value="pAAV-Helper">pAAV-Helper</option>
-            <option value="AAV2/6">AAV2/6</option>
-            <option value="AAV-CMV-EGFP">AAV-CMV-EGFP</option>
-        </select>
-        <input type="number" id="plasmid_helper_length" placeholder="Длина плазмиды (bp)" value="11600">
+        <label for="plasmid_helper_concentration">📏 Концентрация pAAV-Helper (мкг/пикомоль):</label>
+        <input type="number" id="plasmid_helper_concentration" value="1" step="0.01">
 
-        <label for="plasmid_capsid">📏 Плазмида капсида:</label>
-        <select id="plasmid_capsid">
-            <option value="AAV2/6">AAV2/6</option>
-            <option value="pAAV-Helper">pAAV-Helper</option>
-            <option value="AAV-CMV-EGFP">AAV-CMV-EGFP</option>
-        </select>
-        <input type="number" id="plasmid_capsid_length" placeholder="Длина плазмиды (bp)" value="7300">
+        <label for="plasmid_capsid_concentration">📏 Концентрация капсида (мкг/пикомоль):</label>
+        <input type="number" id="plasmid_capsid_concentration" value="1" step="0.01">
 
-        <label for="plasmid_transgene">📏 Плазмида трансгена:</label>
-        <select id="plasmid_transgene">
-            <option value="AAV-CMV-EGFP">AAV-CMV-EGFP</option>
-            <option value="pAAV-Helper">pAAV-Helper</option>
-            <option value="AAV2/6">AAV2/6</option>
-        </select>
-        <input type="number" id="plasmid_transgene_length" placeholder="Длина плазмиды (bp)" value="5200">
+        <label for="plasmid_transgene_concentration">📏 Концентрация трансгена (мкг/пикомоль):</label>
+        <input type="number" id="plasmid_transgene_concentration" value="1" step="0.01">
 
-        <!-- Соотношение плазмид -->
         <label for="plasmid_ratio">🔗 Соотношение плазмид (pHelper : Capsid : Transgene):</label>
         <input type="text" id="plasmid_ratio" value="1:1:1">
 
-        <!-- Тип объема наработки -->
-        <label for="volume_type">🧪 Тип объема наработки:</label>
+        <!-- Длина плазмид -->
+        <label for="plasmid_helper_length">📏 Длина pAAV-Helper (bp):</label>
+        <input type="number" id="plasmid_helper_length" value="11600" step="1">
+
+        <label for="plasmid_capsid_length">📏 Длина капсида (bp):</label>
+        <input type="number" id="plasmid_capsid_length" value="7300" step="1">
+
+        <label for="plasmid_transgene_length">📏 Длина трансгена (bp):</label>
+        <input type="number" id="plasmid_transgene_length" value="7300" step="1">
+
+        <!-- Объем наработки (можно вводить несколько значений) -->
+        <label for="volume_type">🧪 Тип объема наработки (выберите тип):</label>
         <select id="volume_type">
-            <option value="T175">T175</option>
-            <option value="КРУГЛЫЕ 10см">КРУГЛЫЕ 10см</option>
-            <option value="5-level cellstack">5-level cellstack</option>
+            <option value="T175">T175 (коэффициент перевода = 1)</option>
+            <option value="КРУГЛЫЕ 10см">КРУГЛЫЕ 10см (коэффициент перевода = 0.6)</option>
+            <option value="5-level cellstack">5-level cellstack (коэффициент перевода = 18)</option>
         </select>
 
-        <!-- Количество объемов наработки -->
         <label for="volume_amount">🧪 Количество объемов наработки:</label>
         <input type="number" id="volume_amount" value="1" min="1" step="1">
 
-        <!-- Кнопка расчета -->
+        <label for="volume_work_ml">🧪 Объем наработки (мл):</label>
+        <input type="number" id="volume_work_ml" value="30" step="0.1">
+
         <button type="button" id="calculate-btn">🔢 Рассчитать</button>
     </div>
 
@@ -63,8 +79,84 @@
         <p>🔢 <strong>Общее количество ДНК (нг):</strong> <span id="output_total_dna"></span></p>
         <p>🔢 <strong>Общее количество вирусных геномов (VG):</strong> <span id="output_VG"></span></p>
         <p>🔢 <strong>Объем микса (мл):</strong> <span id="output_mix"></span></p>
+        <p>📏 <strong>Длина pAAV-Helper (bp):</strong> <span id="output_plasmid_helper_length"></span></p>
+        <p>📏 <strong>Длина капсида (bp):</strong> <span id="output_plasmid_capsid_length"></span></p>
+        <p>📏 <strong>Длина трансгена (bp):</strong> <span id="output_plasmid_transgene_length"></span></p>
     </div>
 
-    <script src="scripts.js"></script>
+    <script>
+        // Функция для расчета
+        function calculate() {
+            // Получаем значения из полей ввода
+            let plasmidHelperConcentration = parseFloat(document.getElementById("plasmid_helper_concentration").value);
+            let plasmidCapsidConcentration = parseFloat(document.getElementById("plasmid_capsid_concentration").value);
+            let plasmidTransgeneConcentration = parseFloat(document.getElementById("plasmid_transgene_concentration").value);
+
+            // Парсим соотношение плазмид
+            let plasmidRatio = document.getElementById("plasmid_ratio").value.split(':').map(r => parseFloat(r.trim()));
+
+            // Получаем длину плазмид
+            let plasmidHelperLength = parseFloat(document.getElementById("plasmid_helper_length").value);
+            let plasmidCapsidLength = parseFloat(document.getElementById("plasmid_capsid_length").value);
+            let plasmidTransgeneLength = parseFloat(document.getElementById("plasmid_transgene_length").value);
+
+            // Проверка на корректность значений
+            if (isNaN(plasmidHelperConcentration) || isNaN(plasmidCapsidConcentration) || isNaN(plasmidTransgeneConcentration) || plasmidRatio.length !== 3 || isNaN(plasmidHelperLength) || isNaN(plasmidCapsidLength) || isNaN(plasmidTransgeneLength)) {
+                alert("Пожалуйста, убедитесь, что все поля заполнены корректно.");
+                return;
+            }
+
+            // Получаем выбранный тип емкости для наработки
+            let volumeType = document.getElementById("volume_type").value;
+            let coef = 0;
+
+            // Устанавливаем коэффициент перевода в зависимости от типа емкости
+            if (volumeType === "T175") {
+                coef = 1;
+            } else if (volumeType === "КРУГЛЫЕ 10см") {
+                coef = 0.6;
+            } else if (volumeType === "5-level cellstack") {
+                coef = 18;
+            }
+
+            // Устанавливаем значение коэффициента перевода в поле
+            document.getElementById("coef").value = coef;
+
+            let volumeWork = parseFloat(document.getElementById("volume_work_ml").value);
+            let volumeAmount = parseInt(document.getElementById("volume_amount").value);
+
+            // Проверка на корректность значений
+            if (isNaN(volumeWork) || isNaN(coef) || isNaN(volumeAmount)) {
+                alert("Пожалуйста, убедитесь, что объем и коэффициент перевода введены корректно.");
+                return;
+            }
+
+            // Расчет объема КЖ (ml)
+            let KJ = volumeWork * coef * volumeAmount;
+
+            // Расчет суммарного количества ДНК для всех трех плазмид с учетом их соотношений
+            let totalDNA = (plasmidHelperConcentration * plasmidRatio[0]) + 
+                           (plasmidCapsidConcentration * plasmidRatio[1]) + 
+                           (plasmidTransgeneConcentration * plasmidRatio[2]);
+
+            // Расчет общего количества вирусных геномов (VG) и объема микса
+            let VG = totalDNA * 1e6;  // Примерная формула для количества вирусных геномов (VG)
+            let mixVolume = VG / (10 * 1e6);  // Примерная формула для объема микса (ml)
+
+            // Вывод результатов
+            document.getElementById("output_KJ").textContent = KJ.toFixed(2) + " мл";
+            document.getElementById("output_total_dna").textContent = totalDNA.toFixed(2) + " нг";
+            document.getElementById("output_VG").textContent = VG.toExponential(2) + " VG";
+            document.getElementById("output_mix").textContent = mixVolume.toFixed(2) + " мл";
+
+            // Вывод длины плазмид
+            document.getElementById("output_plasmid_helper_length").textContent = plasmidHelperLength + " bp";
+            document.getElementById("output_plasmid_capsid_length").textContent = plasmidCapsidLength + " bp";
+            document.getElementById("output_plasmid_transgene_length").textContent = plasmidTransgeneLength + " bp";
+        }
+
+        // Привязка события к кнопке
+        document.getElementById("calculate-btn").addEventListener("click", calculate);
+    </script>
 </body>
 </html>
