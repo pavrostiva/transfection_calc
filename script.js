@@ -30,10 +30,6 @@ function calculate() {
     const plasmidCapsidLength = parseFloat(document.getElementById("plasmid_capsid_length").value);
     const plasmidTransgeneLength = parseFloat(document.getElementById("plasmid_transgene_length").value);
 
-    const plasmidHelperConcentration = plasmidsData[plasmidHelper].concentration;
-    const plasmidCapsidConcentration = plasmidsData[plasmidCapsid].concentration;
-    const plasmidTransgeneConcentration = plasmidsData[plasmidTransgene].concentration;
-
     const plasmidRatio = document.getElementById("plasmid_ratio").value.split(':').map(r => parseFloat(r.trim()));
 
     const volumeType = document.getElementById("volume_type").value;
@@ -51,9 +47,9 @@ function calculate() {
     const KJ = volumeWork * coef * volumeAmount;
 
     // Расчет суммарного количества ДНК
-    const totalDNA = (plasmidHelperConcentration * plasmidRatio[0]) +
-                     (plasmidCapsidConcentration * plasmidRatio[1]) +
-                     (plasmidTransgeneConcentration * plasmidRatio[2]);
+    const totalDNA = (plasmidHelperLength * plasmidRatio[0]) +
+                     (plasmidCapsidLength * plasmidRatio[1]) +
+                     (plasmidTransgeneLength * plasmidRatio[2]);
 
     // Расчет общего количества вирусных геномов (VG)
     const VG = totalDNA * 1e6;
