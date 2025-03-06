@@ -35,3 +35,8 @@ th, td {
     border: 1px solid black;
     padding: 10px;
 }
+
+/* 🔹 Добавляем отступ между полями */
+.spacer {
+    height: 10px;
+}
