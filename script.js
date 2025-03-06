@@ -26,6 +26,10 @@ function calculate() {
     const plasmidCapsid = document.getElementById("plasmid_capsid").value;
     const plasmidTransgene = document.getElementById("plasmid_transgene").value;
 
+    const plasmidHelperLength = parseFloat(document.getElementById("plasmid_helper_length").value);
+    const plasmidCapsidLength = parseFloat(document.getElementById("plasmid_capsid_length").value);
+    const plasmidTransgeneLength = parseFloat(document.getElementById("plasmid_transgene_length").value);
+
     const plasmidHelperConcentration = plasmidsData[plasmidHelper].concentration;
     const plasmidCapsidConcentration = plasmidsData[plasmidCapsid].concentration;
     const plasmidTransgeneConcentration = plasmidsData[plasmidTransgene].concentration;
@@ -36,6 +40,12 @@ function calculate() {
     const coef = coefficients[volumeType];
     const volumeWork = mediumVolume[volumeType];
     const volumeAmount = parseInt(document.getElementById("volume_amount").value);
+
+    // Проверка на корректность ввода
+    if (isNaN(plasmidHelperLength) || isNaN(plasmidCapsidLength) || isNaN(plasmidTransgeneLength)) {
+        alert("Пожалуйста, введите корректные длины плазмид.");
+        return;
+    }
 
     // Расчет объема КЖ
     const KJ = volumeWork * coef * volumeAmount;

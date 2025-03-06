@@ -11,12 +11,14 @@
 
     <!-- Ввод данных для расчета -->
     <div class="input-container">
+        <!-- Выбор плазмид и их размеров -->
         <label for="plasmid_helper">📏 Плазмида pAAV-Helper:</label>
         <select id="plasmid_helper">
             <option value="pAAV-Helper">pAAV-Helper</option>
             <option value="AAV2/6">AAV2/6</option>
             <option value="AAV-CMV-EGFP">AAV-CMV-EGFP</option>
         </select>
+        <input type="number" id="plasmid_helper_length" placeholder="Длина плазмиды (bp)" value="11600">
 
         <label for="plasmid_capsid">📏 Плазмида капсида:</label>
         <select id="plasmid_capsid">
@@ -24,6 +26,7 @@
             <option value="pAAV-Helper">pAAV-Helper</option>
             <option value="AAV-CMV-EGFP">AAV-CMV-EGFP</option>
         </select>
+        <input type="number" id="plasmid_capsid_length" placeholder="Длина плазмиды (bp)" value="7300">
 
         <label for="plasmid_transgene">📏 Плазмида трансгена:</label>
         <select id="plasmid_transgene">
@@ -31,10 +34,13 @@
             <option value="pAAV-Helper">pAAV-Helper</option>
             <option value="AAV2/6">AAV2/6</option>
         </select>
+        <input type="number" id="plasmid_transgene_length" placeholder="Длина плазмиды (bp)" value="5200">
 
+        <!-- Соотношение плазмид -->
         <label for="plasmid_ratio">🔗 Соотношение плазмид (pHelper : Capsid : Transgene):</label>
         <input type="text" id="plasmid_ratio" value="1:1:1">
 
+        <!-- Тип объема наработки -->
         <label for="volume_type">🧪 Тип объема наработки:</label>
         <select id="volume_type">
             <option value="T175">T175</option>
@@ -42,9 +48,11 @@
             <option value="5-level cellstack">5-level cellstack</option>
         </select>
 
+        <!-- Количество объемов наработки -->
         <label for="volume_amount">🧪 Количество объемов наработки:</label>
         <input type="number" id="volume_amount" value="1" min="1" step="1">
 
+        <!-- Кнопка расчета -->
         <button type="button" id="calculate-btn">🔢 Рассчитать</button>
     </div>
 
