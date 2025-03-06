@@ -160,13 +160,13 @@
       const total_plasmid_volume = Volume1 + Volume2 + Volume3;
 
       // Вывод результатов
-      document.getElementById("total_DNA").textContent = `ДНК всего (мкг): ${total_DNA.toFixed(2)}`;
-      document.getElementById("total_plasmid").textContent = `Общее количество плазмид: ${total_plasmid.toFixed(2)}`;
-      document.getElementById("total_PEI").textContent = `Суммарное количество PEI, мкл: ${total_PEI.toFixed(2)}`;
-      document.getElementById("total_plasmid_volume").textContent = `Общий объем плазмид, мкл: ${total_plasmid_volume.toFixed(2)}`;
-      document.getElementById("Volume1").textContent = `Объем pAAV-Helper: ${Volume1.toFixed(2)} мкл`;
-      document.getElementById("Volume2").textContent = `Объем AAV2/6: ${Volume2.toFixed(2)} мкл`;
-      document.getElementById("Volume3").textContent = `Объем AAV-CMV-EGFP: ${Volume3.toFixed(2)} мкл`;
+      document.getElementById("total_DNA").innerHTML = `ДНК всего (мкг): ${total_DNA.toFixed(2)}<br>`;
+      document.getElementById("total_plasmid").innerHTML = `Общее количество плазмид: ${total_plasmid.toFixed(2)}<br>`;
+      document.getElementById("total_PEI").innerHTML = `Суммарное количество PEI, мкл: ${total_PEI.toFixed(2)}<br>`;
+      document.getElementById("total_plasmid_volume").innerHTML = `Общий объем плазмид, мкл: ${total_plasmid_volume.toFixed(2)}<br>`;
+      document.getElementById("Volume1").innerHTML = `Объем pAAV-Helper: ${Volume1.toFixed(2)} мкл<br>`;
+      document.getElementById("Volume2").innerHTML = `Объем AAV2/6: ${Volume2.toFixed(2)} мкл<br>`;
+      document.getElementById("Volume3").innerHTML = `Объем AAV-CMV-EGFP: ${Volume3.toFixed(2)} мкл<br>`;
     }
   </script>
 </body>
