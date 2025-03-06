@@ -39,6 +39,15 @@
             padding: 15px;
             border-radius: 8px;
         }
+        .help {
+            margin-top: 30px;
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .help h3 {
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -58,6 +67,28 @@
             <option value="10-level cellstack">10-level cellstack</option>
         </select>
 
+        <!-- Ввод размеров плазмид -->
+        <h3>Длина плазмид (в парах оснований):</h3>
+        <label for="L1">Длина плазмиды pAAV-Helper (базовые пары):</label>
+        <input type="number" id="L1" value="11635">
+
+        <label for="L2">Длина плазмиды AAV2/6 (базовые пары):</label>
+        <input type="number" id="L2" value="8369">
+
+        <label for="L3">Длина плазмиды AAV-CMV-EGFP (базовые пары):</label>
+        <input type="number" id="L3" value="7285">
+
+        <!-- Ввод молекулярного соотношения -->
+        <h3>Молекулярное соотношение плазмид:</h3>
+        <label for="M1">Соотношение pAAV-Helper:</label>
+        <input type="number" id="M1" value="1">
+
+        <label for="M2">Соотношение AAV2/6:</label>
+        <input type="number" id="M2" value="1">
+
+        <label for="M3">Соотношение AAV-CMV-EGFP:</label>
+        <input type="number" id="M3" value="1">
+
         <label for="conc1">Концентрация pAAV-Helper (мкг/мкл):</label>
         <input type="number" id="conc1" value="1.1">
 
@@ -71,21 +102,29 @@
 
         <!-- Вывод результата -->
         <div class="result" id="result"></div>
+
+        <!-- Справка по расчетам -->
+        <div class="help">
+            <h3>Принципы расчета:</h3>
+            <p>1. Длина плазмид рассчитывается в парах оснований.</p>
+            <p>2. Молекулярная масса ДНК на основе длины плазмиды умножается на 660 г/моль на пару оснований.</p>
+            <p>3. Молекулярное соотношение плазмид влияет на итоговое количество ДНК, которое нужно использовать для трансфекции.</p>
+            <p>4. Количество плазмид рассчитывается на основе площади флакона и концентрации ДНК в клеточной культуре.</p>
+            <p>5. Объемы плазмид и общей среды рассчитываются с учетом их концентраций и объема.</p>
+        </div>
     </div>
 
     <script>
         function calculate() {
             // Ввод параметров
-            const L1 = 11635; // Длина плазмиды pAAV-Helper
-            const L2 = 8369;  // Длина плазмиды AAV2/6
-            const L3 = 7285;  // Длина плазмиды AAV-CMV-EGFP
+            const L1 = parseFloat(document.getElementById('L1').value); // Длина плазмиды pAAV-Helper
+            const L2 = parseFloat(document.getElementById('L2').value); // Длина плазмиды AAV2/6
+            const L3 = parseFloat(document.getElementById('L3').value); // Длина плазмиды AAV-CMV-EGFP
 
-            // Молярное соотношение плазмид
-            const M1 = 1;
-            const M2 = 1;
-            const M3 = 1;
+            const M1 = parseFloat(document.getElementById('M1').value); // Соотношение pAAV-Helper
+            const M2 = parseFloat(document.getElementById('M2').value); // Соотношение AAV2/6
+            const M3 = parseFloat(document.getElementById('M3').value); // Соотношение AAV-CMV-EGFP
 
-            // Получаем значения из формы
             const working_volume = parseFloat(document.getElementById('working_volume').value);
             const flask_type = document.getElementById('flask_type').value;
             const conc1 = parseFloat(document.getElementById('conc1').value);
