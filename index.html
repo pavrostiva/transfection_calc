@@ -4,55 +4,71 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Калькулятор AAV</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Калькулятор AAV</h1>
-    
-    <form id="calc-form">
-        <label>📏 Длина плазмиды (bp):
+    <div class="container">
+        <h1>Калькулятор AAV</h1>
+        
+        <!-- Вводные параметры -->
+        <div class="inputs">
+            <label for="plasmid_length">📏 Длина плазмиды (bp):</label>
             <input type="number" id="plasmid_length" value="7300">
-        </label>
-        <div class="spacer"></div> <!-- Отступ -->
 
-        <label>🧬 Количество ДНК (нг/мкл):
+            <label for="dna_amount">🧬 Количество ДНК (нг/мкл):</label>
             <input type="number" id="dna_amount" value="50">
-        </label>
-        <div class="spacer"></div>
 
-        <label>🔗 Соотношение плазмид:
+            <label for="plasmid_ratio">🔗 Соотношение плазмид:</label>
             <input type="number" id="plasmid_ratio" value="1">
-        </label>
-        <div class="spacer"></div>
 
-        <label>🧪 Объем наработки (мл):
+            <label for="volume_work">🧪 Объем наработки (мл):</label>
             <input type="number" id="volume_work" value="30">
-        </label>
-        <div class="spacer"></div>
 
-        <label>🔄 Коэффициент перевода (см² → мл):
+            <label for="coef">🔄 Коэффициент перевода (см² → мл):</label>
             <input type="number" id="coef" value="0.17">
-        </label>
-        <div class="spacer"></div>
 
-        <button type="button" onclick="calculate()">🔢 Рассчитать</button>
-    </form>
+            <button type="button" id="calculate-btn">🔢 Рассчитать</button>
+        </div>
 
-    <h2>📊 Результаты</h2>
-    <table id="result-table">
-        <thead>
-            <tr>
-                <th>Параметр</th>
-                <th>Значение</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr><td>Объем КЖ</td><td id="output_KJ"></td></tr>
-            <tr><td>Суммарное количество плазмид</td><td id="output_total_plasmids"></td></tr>
-            <tr><td>Количество вирусных геномов</td><td id="output_VG"></td></tr>
-            <tr><td>Объем плазмидного микса</td><td id="output_mix"></td></tr>
-        </tbody>
-    </table>
+        <!-- Вывод результатов -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Параметр</th>
+                    <th>Значение</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Объем КЖ (мл)</td>
+                    <td id="output_KJ">0</td>
+                </tr>
+                <tr>
+                    <td>Суммарное количество плазмид (нг)</td>
+                    <td id="output_total_plasmids">0</td>
+                </tr>
+                <tr>
+                    <td>Количество вирусных геномов (VG)</td>
+                    <td id="output_VG">0</td>
+                </tr>
+                <tr>
+                    <td>Объем микса (мл)</td>
+                    <td id="output_mix">0</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Блок с описанием формул -->
+        <div class="formulas">
+            <h2>Формулы для расчетов:</h2>
+            <ul>
+                <li><strong>Объем КЖ (мл)</strong>: <span id="formula_KJ">Объем наработки (мл) × Коэффициент перевода (см² → мл)</span></li>
+                <li><strong>Суммарное количество плазмид (нг)</strong>: <span id="formula_total_plasmids">Количество ДНК (нг/мкл) × Соотношение плазмид</span></li>
+                <li><strong>Количество вирусных геномов (VG)</strong>: <span id="formula_VG">Суммарное количество плазмид (нг) × Длина плазмиды (bp) × 10<sup>6</sup></span></li>
+                <li><strong>Объем микса (мл)</strong>: <span id="formula_mix">Количество вирусных геномов (VG) ÷ (10 × 10<sup>6</sup>)</span></li>
+            </ul>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
