@@ -4,6 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Калькулятор трансфекции AAV</title>
+    <style>
+        /* Стили для улучшения отображения формы */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .input-container {
+            margin-bottom: 20px;
+        }
+        .input-container label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .input-container input, .input-container select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+        .output-container {
+            margin-top: 30px;
+        }
+    </style>
 </head>
 <body>
 
@@ -33,15 +55,16 @@
         <label for="plasmid_transgene_length">📏 Длина трансгена (bp):</label>
         <input type="number" id="plasmid_transgene_length" value="7300" step="1">
 
-        <label for="volume_work">🧪 Объем наработки (выберите тип):</label>
+        <!-- Объем наработки (можно вводить несколько значений) -->
+        <label for="volume_type">🧪 Тип объема наработки (выберите тип):</label>
         <select id="volume_type">
             <option value="T175">T175 (коэффициент перевода = 1)</option>
             <option value="КРУГЛЫЕ 10см">КРУГЛЫЕ 10см (коэффициент перевода = 0.6)</option>
             <option value="5-level cellstack">5-level cellstack (коэффициент перевода = 18)</option>
         </select>
 
-        <label for="coef">🔄 Коэффициент перевода (см² → мл):</label>
-        <input type="text" id="coef" disabled>
+        <label for="volume_amount">🧪 Количество объемов наработки:</label>
+        <input type="number" id="volume_amount" value="1" min="1" step="1">
 
         <label for="volume_work_ml">🧪 Объем наработки (мл):</label>
         <input type="number" id="volume_work_ml" value="30" step="0.1">
@@ -100,15 +123,16 @@
             document.getElementById("coef").value = coef;
 
             let volumeWork = parseFloat(document.getElementById("volume_work_ml").value);
+            let volumeAmount = parseInt(document.getElementById("volume_amount").value);
 
             // Проверка на корректность значений
-            if (isNaN(volumeWork) || isNaN(coef)) {
+            if (isNaN(volumeWork) || isNaN(coef) || isNaN(volumeAmount)) {
                 alert("Пожалуйста, убедитесь, что объем и коэффициент перевода введены корректно.");
                 return;
             }
 
             // Расчет объема КЖ (ml)
-            let KJ = volumeWork * coef;
+            let KJ = volumeWork * coef * volumeAmount;
 
             // Расчет суммарного количества ДНК для всех трех плазмид с учетом их соотношений
             let totalDNA = (plasmidHelperConcentration * plasmidRatio[0]) + 
