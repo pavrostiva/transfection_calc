@@ -9,7 +9,7 @@ M2 <- 1
 M3 <- 1
 
 # Объем наработки
-working_volume <- 8 # 8xT175
+working_volume <- 1 # 1xT175
 
 # Выбор флакона и коэффициента перевода площадь-КЖ
 flask_type <- "T175" # Можно выбрать: "T175", "КРУГЛЫЕ10СМ", "5-level cellstack", "10-level cellstack"
