@@ -38,6 +38,7 @@
       padding: 10px;
       background-color: #f9f9f9;
       border: 1px solid #ddd;
+      white-space: pre-line;
     }
   </style>
 </head>
@@ -74,18 +75,6 @@
         <option value="36">10-level cellstack</option>
       </select>
 
-      <label for="DNA_per_ml">Кол-во ДНК на 1 мл КЖ (мкг):</label>
-      <input type="number" id="DNA_per_ml" value="1.5" required>
-
-      <label for="medium_per_flask">Объем среды на 1 флакон Т175 (мл):</label>
-      <input type="number" id="medium_per_flask" value="30" required>
-
-      <label for="TF_mixture_volume_per_flask">Объем микса на флакон Т175 (мл):</label>
-      <input type="number" id="TF_mixture_volume_per_flask" value="3" required>
-
-      <label for="PEI_to_DNA">Коэффициент PEI/DNA:</label>
-      <input type="number" id="PEI_to_DNA" value="3" required>
-
       <label for="conc1">Концентрация pAAV-Helper (мкг/мкл):</label>
       <input type="number" id="conc1" value="1.1" required>
 
@@ -98,22 +87,11 @@
       <button type="button" onclick="calculate()">Рассчитать</button>
     </form>
 
-    <div class="results">
-      <h3>Результаты расчета:</h3>
-      <p id="total_DNA"></p>
-      <p id="total_plasmid"></p>
-      <p id="total_PEI"></p>
-      <p id="total_plasmid_volume"></p>
-      <h3>Объем каждой плазмиды (мкл):</h3>
-      <p id="Volume1"></p>
-      <p id="Volume2"></p>
-      <p id="Volume3"></p>
-    </div>
+    <div class="results" id="results"></div>
   </div>
 
   <script>
     function calculate() {
-      // Вводные данные
       const L1 = parseFloat(document.getElementById("L1").value);
       const L2 = parseFloat(document.getElementById("L2").value);
       const L3 = parseFloat(document.getElementById("L3").value);
@@ -122,51 +100,47 @@
       const M3 = parseFloat(document.getElementById("M3").value);
       const working_volume = parseFloat(document.getElementById("working_volume").value);
       const K = parseFloat(document.getElementById("flask_type").value);
-      const DNA_per_ml = parseFloat(document.getElementById("DNA_per_ml").value);
-      const medium_per_flask = parseFloat(document.getElementById("medium_per_flask").value);
-      const TF_mixture_volume_per_flask = parseFloat(document.getElementById("TF_mixture_volume_per_flask").value);
-      const PEI_to_DNA = parseFloat(document.getElementById("PEI_to_DNA").value);
       const conc1 = parseFloat(document.getElementById("conc1").value);
       const conc2 = parseFloat(document.getElementById("conc2").value);
       const conc3 = parseFloat(document.getElementById("conc3").value);
 
-      // Расчет количества ДНК
-      const V1 = (L1 * 660) / 1e6;
-      const V2 = (L2 * 660) / 1e6;
-      const V3 = (L3 * 660) / 1e6;
-      const DNA1 = V1 * M1;
-      const DNA2 = V2 * M2;
-      const DNA3 = V3 * M3;
-      const total_DNA = DNA1 + DNA2 + DNA3;
+      const DNA_per_ml = 1.5;
+      const medium_per_flask = 30;
+      const PEI_to_DNA = 3;
 
-      // Общее количество плазмид
+      const V1 = (L1 * 660) / 1e6 * M1;
+      const V2 = (L2 * 660) / 1e6 * M2;
+      const V3 = (L3 * 660) / 1e6 * M3;
       const total_plasmid = working_volume * K * DNA_per_ml * medium_per_flask;
-
-      // Суммарное количество PEI
       const total_PEI = total_plasmid * PEI_to_DNA;
-
-      // Коэффициент для расчета
-      const coefficient = total_plasmid / total_DNA;
-
-      // Расчет на все чашки
-      const X1 = coefficient * DNA1;
-      const X2 = coefficient * DNA2;
-      const X3 = coefficient * DNA3;
-
-      // Объем плазмид
-      const Volume1 = X1 / conc1;
-      const Volume2 = X2 / conc2;
-      const Volume3 = X3 / conc3;
+      const coefficient = total_plasmid / (V1 + V2 + V3);
+      const Volume1 = (coefficient * V1) / conc1;
+      const Volume2 = (coefficient * V2) / conc2;
+      const Volume3 = (coefficient * V3) / conc3;
       const total_plasmid_volume = Volume1 + Volume2 + Volume3;
 
-      // Вывод результатов
-      document.getElementById("total_DNA").innerHTML = `ДНК всего (мкг): ${total_DNA.toFixed(2)}<br>`;
-      document.getElementById("total_plasmid").innerHTML = `Общее количество плазмид: ${total_plasmid.toFixed(2)}<br>`;
-      document.getElementById("total_PEI").innerHTML = `Суммарное количество PEI, мкл: ${total_PEI.toFixed(2)}<br>`;
-      document.getElementById("total_plasmid_volume").innerHTML = `Общий объем плазмид, мкл: ${total_plasmid_volume.toFixed(2)}<br>`;
-      document.getElementById("Volume1").innerHTML = `Объем pAAV-Helper: ${Volume1.toFixed(2)} мкл<br>`;
-      document.getElementById("Volume2").innerHTML = `Объем AAV2/6: ${Volume2.toFixed(2)} мкл<br>`;
-      document.getElementById("Volume3").innerHTML = `Объем AAV-CMV-EGFP: ${Volume3.toFixed(2)} мкл<br>`;
+      document.getElementById("results").innerText = 
+        `Общее количество плазмид: ${total_plasmid.toFixed(2)} мкг
+` +
+        `Суммарное количество PEI: ${total_PEI.toFixed(2)} мкл
+` +
+        `Общий объем плазмид: ${total_plasmid_volume.toFixed(2)} мкл
+` +
+        `Объем pAAV-Helper: ${Volume1.toFixed(2)} мкл
+` +
+        `Объем AAV2/6: ${Volume2.toFixed(2)} мкл
+` +
+        `Объем AAV-CMV-EGFP: ${Volume3.toFixed(2)} мкл
+
+` +
+        `# Принципы расчета:
+1. Количество ДНК = Длина плазмиды * 660 / 10^6
+2. Общий объем плазмид рассчитывается по молярному соотношению
+3. Общее количество PEI = количество плазмид * 3
+4. Константы:
+   - ДНК на 1 мл КЖ: 1.5 мкг
+   - Среда на флакон: 30 мл
+   - PEI/DNA: 3`;
     }
   </script>
 </body>
