@@ -47,7 +47,7 @@
     th, td {
       border: 1px solid #ddd;
       padding: 8px;
-      text-align: left;
+      text-align: center;
     }
     th {
       background-color: #f2f2f2;
@@ -88,13 +88,13 @@
       </select>
 
       <label for="conc1">Концентрация pAAV-Helper (мкг/мкл):</label>
-      <input type="number" id="conc1" value="1.1" required>
+      <input type="number" id="conc1" required>
 
       <label for="conc2">Концентрация capsid AAV (мкг/мкл):</label>
-      <input type="number" id="conc2" value="2.335" required>
+      <input type="number" id="conc2" required>
 
       <label for="conc3">Концентрация AAV pITR (мкг/мкл):</label>
-      <input type="number" id="conc3" value="1.01" required>
+      <input type="number" id="conc3" required>
 
       <button type="button" onclick="calculate()">Рассчитать</button>
     </form>
@@ -120,23 +120,41 @@
       const medium_per_flask = 30;
       const PEI_to_DNA = 3;
 
+      const V1 = (L1 * 660) / 1e6 * M1;
+      const V2 = (L2 * 660) / 1e6 * M2;
+      const V3 = (L3 * 660) / 1e6 * M3;
       const total_plasmid = working_volume * K * DNA_per_ml * medium_per_flask;
       const total_PEI = total_plasmid * PEI_to_DNA;
-      const medium_for_PEI = total_PEI * 2;
-      const medium_for_DNA = total_plasmid * 2;
+      const medium_for_PEI = total_PEI * 1.5;
+      const coefficient = total_plasmid / (V1 + V2 + V3);
+      const Volume1 = (coefficient * V1) / conc1;
+      const Volume2 = (coefficient * V2) / conc2;
+      const Volume3 = (coefficient * V3) / conc3;
+      const total_plasmid_volume = Volume1 + Volume2 + Volume3;
+      const medium_for_DNA = total_plasmid_volume * 1.5;
 
       document.getElementById("results").innerHTML = `
         <table>
           <tr><th>Параметр</th><th>Значение</th></tr>
           <tr><td>Суммарное количество PEI</td><td>${total_PEI.toFixed(2)} мкл</td></tr>
           <tr><td>Среда для PEI</td><td>${medium_for_PEI.toFixed(2)} мкл</td></tr>
-          <tr><td>Среда для ДНК</td><td>${medium_for_DNA.toFixed(2)} мкл</td></tr>
         </table>
-        <p>
-          Кол-во ДНК на 1 мл КЖ: 1.5 мкг <br>
-          Соотношение PEI/DNA: 3 мкг/мкл <br>
-          Объем ТФ смеси на флакон T175: 3 мл
-        </p>`;
+
+        <br>
+
+        <table>
+          <tr><th>Параметр</th><th>Значение</th></tr>
+          <tr><td>Среда для ДНК</td><td>${medium_for_DNA.toFixed(2)} мкл</td></tr>
+          <tr><td>Объем pAAV-Helper</td><td>${Volume1.toFixed(2)} мкл</td></tr>
+          <tr><td>Объем capsid AAV</td><td>${Volume2.toFixed(2)} мкл</td></tr>
+          <tr><td>Объем AAV pITR</td><td>${Volume3.toFixed(2)} мкл</td></tr>
+        </table>
+
+        <br>
+        Кол-во ДНК на 1 мл КЖ: 1.5 мкг<br>
+        Соотношение PEI/DNA: 3 мкг/мкл<br>
+        Объем ТФ смеси на флакон Т175: 3 мл
+      `;
     }
   </script>
 </body>
