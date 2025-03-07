@@ -1,236 +1,171 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Расчет плазмид</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://cdn.jsdelivr.net/pyodide/v0.23.0/full/pyodide.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Расчет для плазмид</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+    table, th, td { border: 1px solid black; }
+    th, td { padding: 10px; text-align: center; }
+    label, input, select { margin-bottom: 10px; }
+  </style>
 </head>
 <body>
-    <h1>Расчет плазмид для клеточной культуры</h1>
 
-    <div>
-        <label for="L1">Длина плазмиды pAAV-Helper (bp):</label>
-        <input type="number" id="L1" value="11600">
-    </div>
-    <div>
-        <label for="L2">Длина плазмиды capsid AAV (bp):</label>
-        <input type="number" id="L2" value="7300">
-    </div>
-    <div>
-        <label for="L3">Длина плазмиды AAV pITR (bp):</label>
-        <input type="number" id="L3" value="7000">
-    </div>
-    <div>
-        <label for="M1">Молярное соотношение pAAV-Helper:</label>
-        <input type="number" id="M1" value="1">
-    </div>
-    <div>
-        <label for="M2">Молярное соотношение capsid AAV:</label>
-        <input type="number" id="M2" value="1">
-    </div>
-    <div>
-        <label for="M3">Молярное соотношение AAV pITR:</label>
-        <input type="number" id="M3" value="1">
-    </div>
-    <div>
-        <label for="working_volume">Объем наработки (кол-во флаконов):</label>
-        <input type="number" id="working_volume" value="1">
-    </div>
-    <div>
-        <label for="flask_type">Тип флакона:</label>
-        <select id="flask_type">
-            <option value="T175">T175</option>
-            <option value="КРУГЛЫЕ10СМ">КРУГЛЫЕ10СМ</option>
-            <option value="5-level cellstack">5-level cellstack</option>
-            <option value="10-level cellstack">10-level cellstack</option>
-        </select>
-    </div>
-    <div>
-        <label for="conc1">Концентрация pAAV-Helper (мкг/мкл):</label>
-        <input type="number" id="conc1" value="1.1">
-    </div>
-    <div>
-        <label for="conc2">Концентрация capsid AAV (мкг/мкл):</label>
-        <input type="number" id="conc2" value="2.335">
-    </div>
-    <div>
-        <label for="conc3">Концентрация AAV pITR (мкг/мкл):</label>
-        <input type="number" id="conc3" value="1.01">
-    </div>
+<h1>Расчет для плазмид</h1>
 
-    <button id="calculateButton">Рассчитать</button>
+<form id="plasmid-form">
+  <div>
+    <label for="L1">Длина плазмиды pAAV-Helper (bp):</label>
+    <input type="number" id="L1" value="11600" required>
+  </div>
+  <div>
+    <label for="L2">Длина плазмиды capsid AAV (bp):</label>
+    <input type="number" id="L2" value="7300" required>
+  </div>
+  <div>
+    <label for="L3">Длина плазмиды AAV pITR (bp):</label>
+    <input type="number" id="L3" value="7000" required>
+  </div>
+  <div>
+    <label for="M1">Молярное соотношение pAAV-Helper:</label>
+    <input type="number" id="M1" value="1" required>
+  </div>
+  <div>
+    <label for="M2">Молярное соотношение capsid AAV:</label>
+    <input type="number" id="M2" value="1" required>
+  </div>
+  <div>
+    <label for="M3">Молярное соотношение AAV pITR:</label>
+    <input type="number" id="M3" value="1" required>
+  </div>
+  <div>
+    <label for="working_volume">Объем наработки (кол-во флаконов):</label>
+    <input type="number" id="working_volume" value="1" required>
+  </div>
+  <div>
+    <label for="flask_type">Тип флакона:</label>
+    <select id="flask_type">
+      <option value="T175">T175</option>
+      <option value="КРУГЛЫЕ10СМ">КРУГЛЫЕ10СМ</option>
+      <option value="5-level cellstack">5-level cellstack</option>
+      <option value="10-level cellstack">10-level cellstack</option>
+    </select>
+  </div>
+  <div>
+    <label for="conc1">Концентрация pAAV-Helper (мкг/мкл):</label>
+    <input type="number" id="conc1" value="1.1" required>
+  </div>
+  <div>
+    <label for="conc2">Концентрация capsid AAV (мкг/мкл):</label>
+    <input type="number" id="conc2" value="2.335" required>
+  </div>
+  <div>
+    <label for="conc3">Концентрация AAV pITR (мкг/мкл):</label>
+    <input type="number" id="conc3" value="1.01" required>
+  </div>
+  <button type="submit">Рассчитать</button>
+</form>
 
-    <h2>Результаты:</h2>
-    <h3>Суммарное количество PEI и среды</h3>
-    <table id="resultsPEI">
-        <thead>
-            <tr>
-                <th>Параметр</th>
-                <th>Значение</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+<h2>Результаты</h2>
 
-    <h3>Объемы плазмид и среды</h3>
-    <table id="resultsPlasmids">
-        <thead>
-            <tr>
-                <th>Параметр</th>
-                <th>Значение</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+<h3>Суммарное количество PEI</h3>
+<table id="results-PEI">
+  <tr><th>Параметр</th><th>Значение</th></tr>
+</table>
 
-    <h3>Объемы микса</h3>
-    <p id="mixVolume"></p>
-    <p id="totalMixVolume"></p>
+<h3>Суммарное количество ДНК и объемы плазмид</h3>
+<table id="results-DNA">
+  <tr><th>Параметр</th><th>Значение</th></tr>
+</table>
 
-    <script>
-        // Функция загрузки Pyodide и выполнения Python кода
-        async function loadAndRunPyodide() {
-            try {
-                // Загружаем Pyodide
-                console.log("Загружаем Pyodide...");
-                await loadPyodide();
-                console.log("Pyodide успешно загружен!");
+<script>
+  // Функция для расчета
+  function calculate() {
+    // Ввод параметров
+    const L1 = parseFloat(document.getElementById("L1").value);
+    const L2 = parseFloat(document.getElementById("L2").value);
+    const L3 = parseFloat(document.getElementById("L3").value);
+    const M1 = parseFloat(document.getElementById("M1").value);
+    const M2 = parseFloat(document.getElementById("M2").value);
+    const M3 = parseFloat(document.getElementById("M3").value);
+    const working_volume = parseFloat(document.getElementById("working_volume").value);
+    const flask_type = document.getElementById("flask_type").value;
+    const conc1 = parseFloat(document.getElementById("conc1").value);
+    const conc2 = parseFloat(document.getElementById("conc2").value);
+    const conc3 = parseFloat(document.getElementById("conc3").value);
 
-                document.getElementById("calculateButton").addEventListener("click", async function() {
-                    console.log("Кнопка нажата, начинаем расчет...");
+    // Устанавливаем коэффициент K в зависимости от типа флакона
+    let K = 1;
+    if (flask_type === "T175") K = 1;
+    else if (flask_type === "КРУГЛЫЕ10СМ") K = 0.6;
+    else if (flask_type === "5-level cellstack") K = 18;
+    else if (flask_type === "10-level cellstack") K = 36;
 
-                    // Чтение значений из формы
-                    const L1 = parseFloat(document.getElementById('L1').value);
-                    const L2 = parseFloat(document.getElementById('L2').value);
-                    const L3 = parseFloat(document.getElementById('L3').value);
-                    const M1 = parseFloat(document.getElementById('M1').value);
-                    const M2 = parseFloat(document.getElementById('M2').value);
-                    const M3 = parseFloat(document.getElementById('M3').value);
-                    const working_volume = parseFloat(document.getElementById('working_volume').value);
-                    const flask_type = document.getElementById('flask_type').value;
-                    const conc1 = parseFloat(document.getElementById('conc1').value);
-                    const conc2 = parseFloat(document.getElementById('conc2').value);
-                    const conc3 = parseFloat(document.getElementById('conc3').value);
+    // Молекулярная масса (рассчитывается как длина * 660 / 10^6)
+    const V1 = L1 * 660 / Math.pow(10, 6);
+    const V2 = L2 * 660 / Math.pow(10, 6);
+    const V3 = L3 * 660 / Math.pow(10, 6);
 
-                    console.log("Данные формы:", { L1, L2, L3, M1, M2, M3, working_volume, flask_type, conc1, conc2, conc3 });
+    // Количество ДНК
+    const DNA1 = V1 * M1;
+    const DNA2 = V2 * M2;
+    const DNA3 = V3 * M3;
 
-                    const pythonCode = `
-import math
+    // Общее количество ДНК
+    const total_DNA = DNA1 + DNA2 + DNA3;
 
-# Ввод параметров
-L1 = ${L1}
-L2 = ${L2}
-L3 = ${L3}
-M1 = ${M1}
-M2 = ${M2}
-M3 = ${M3}
-working_volume = ${working_volume}
-flask_type = "${flask_type}"
-conc1 = ${conc1}
-conc2 = ${conc2}
-conc3 = ${conc3}
+    // Количество плазмид (с учетом флакона)
+    const total_plasmid = working_volume * K * 1.5 * 30;
 
-# Устанавливаем коэффициент K в зависимости от типа флакона
-if flask_type == "T175":
-    K = 1
-elif flask_type == "КРУГЛЫЕ10СМ":
-    K = 0.6
-elif flask_type == "5-level cellstack":
-    K = 18
-elif flask_type == "10-level cellstack":
-    K = 36
+    // Суммарное количество PEI
+    const total_PEI = total_plasmid * 3;
 
-# Расчет количества ДНК с учетом молекулярной массы
-V1 = L1 * 660 / 10**6
-V2 = L2 * 660 / 10**6
-V3 = L3 * 660 / 10**6
+    // Коэффициент для расчета
+    const coefficient = total_plasmid / total_DNA;
 
-DNA1 = V1 * M1
-DNA2 = V2 * M2
-DNA3 = V3 * M3
+    // Объемы плазмид
+    const X1 = coefficient * DNA1;
+    const X2 = coefficient * DNA2;
+    const X3 = coefficient * DNA3;
 
-total_DNA = DNA1 + DNA2 + DNA3
+    const Volume1 = X1 / conc1;
+    const Volume2 = X2 / conc2;
+    const Volume3 = X3 / conc3;
 
-# Расчет суммарного количества плазмид
-total_plasmid = working_volume * K * 1.5 * 30
+    const total_plasmid_volume = Volume1 + Volume2 + Volume3;
 
-# Суммарное количество PEI
-total_PEI = total_plasmid * 3
+    const media_for_DNA = (working_volume * K * 3 / 2 - total_plasmid_volume * 0.001);
+    const media_for_PEI = (working_volume * K * 3 / 2 - total_PEI * 0.001);
 
-# Коэффициент для расчета
-coefficient = total_plasmid / total_DNA
+    // Расчет микса
+    const DMEM_per_dish = (media_for_DNA + total_plasmid_volume * 0.001 + media_for_PEI + total_PEI * 0.001) / working_volume;
 
-# Расчет на все чашки
-X1 = coefficient * DNA1
-X2 = coefficient * DNA2
-X3 = coefficient * DNA3
+    // Отображаем результаты
+    const resultsPEI = document.getElementById("results-PEI");
+    resultsPEI.innerHTML = `
+      <tr><td>Суммарное количество PEI</td><td>${(total_PEI).toFixed(2)} мкл</td></tr>
+      <tr><td>Среда для PEI</td><td>${(media_for_PEI).toFixed(2)} мкл</td></tr>
+    `;
 
-# Объем плазмид, мкл
-Volume1 = X1 / conc1
-Volume2 = X2 / conc2
-Volume3 = X3 / conc3
+    const resultsDNA = document.getElementById("results-DNA");
+    resultsDNA.innerHTML = `
+      <tr><td>Среда для ДНК</td><td>${(media_for_DNA).toFixed(2)} мкл</td></tr>
+      <tr><td>Объем pAAV-Helper</td><td>${(Volume1).toFixed(2)} мкл</td></tr>
+      <tr><td>Объем capsid AAV</td><td>${(Volume2).toFixed(2)} мкл</td></tr>
+      <tr><td>Объем AAV pITR</td><td>${(Volume3).toFixed(2)} мкл</td></tr>
+      <tr><td>Объем микса с DMEM на чашку</td><td>${(DMEM_per_dish).toFixed(2)} мл</td></tr>
+    `;
+  }
 
-# Общий объем плазмид, мкл
-total_plasmid_volume = Volume1 + Volume2 + Volume3
+  // Обработка отправки формы
+  document.getElementById("plasmid-form").addEventListener("submit", function(event) {
+    event.preventDefault();
+    calculate();
+  });
+</script>
 
-# Сколько суммарно среды к ДНК, мл
-media_for_DNA = (working_volume * K * 3 / 2 - total_plasmid_volume * 0.001)
-
-# Сколько суммарно среды к PEI, мл
-media_for_PEI = (working_volume * K * 3 / 2 - total_PEI * 0.001)
-
-# Объем микса с DMEM на чашку
-DMEM_per_dish = (media_for_DNA + total_plasmid_volume * 0.001 + media_for_PEI + total_PEI * 0.001) / working_volume
-
-# Результаты
-results_PEI = {
-    "Суммарное количество PEI": round(total_PEI, 2),
-    "Среда для PEI": round(media_for_PEI, 2),
-}
-
-results_plasmids = {
-    "Среда для ДНК": round(media_for_DNA, 2),
-    "Объем pAAV-Helper": round(Volume1, 2),
-    "Объем capsid AAV": round(Volume2, 2),
-    "Объем AAV pITR": round(Volume3, 2),
-}
-
-mixVolume = round(DMEM_per_dish, 2)
-totalMixVolume = round(mixVolume * working_volume, 2)
-
-(results_PEI, results_plasmids, mixVolume, totalMixVolume)
-`;
-
-                    const result = await pyodide.runPython(pythonCode);
-                    console.log("Результаты:", result);
-
-                    // Выводим результаты в таблицу
-                    const resultsPEI = document.getElementById("resultsPEI").querySelector("tbody");
-                    resultsPEI.innerHTML = `
-                        <tr><td>Суммарное количество PEI</td><td>${result[0]["Суммарное количество PEI"]}</td></tr>
-                        <tr><td>Среда для PEI</td><td>${result[0]["Среда для PEI"]}</td></tr>
-                    `;
-                    
-                    const resultsPlasmids = document.getElementById("resultsPlasmids").querySelector("tbody");
-                    resultsPlasmids.innerHTML = `
-                        <tr><td>Среда для ДНК</td><td>${result[1]["Среда для ДНК"]}</td></tr>
-                        <tr><td>Объем pAAV-Helper</td><td>${result[1]["Объем pAAV-Helper"]}</td></tr>
-                        <tr><td>Объем capsid AAV</td><td>${result[1]["Объем capsid AAV"]}</td></tr>
-                        <tr><td>Объем AAV pITR</td><td>${result[1]["Объем AAV pITR"]}</td></tr>
-                    `;
-                    
-                    document.getElementById("mixVolume").innerText = "Объем микса с DMEM на чашку: " + result[2] + " мл";
-                    document.getElementById("totalMixVolume").innerText = "Суммарно микс занимает объем: " + result[3] + " мл";
-                });
-            } catch (error) {
-                console.error("Ошибка при загрузке или выполнении Pyodide:", error);
-            }
-        }
-
-        // Загружаем Pyodide при старте страницы
-        window.onload = loadAndRunPyodide;
-    </script>
 </body>
 </html>
