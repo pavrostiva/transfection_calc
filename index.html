@@ -58,35 +58,6 @@
   <div class="container">
     <h1>Расчет трансфекции AAV</h1>
     <form id="calculator">
-      <label for="L1">Длина плазмиды pAAV-Helper (bp):</label>
-      <input type="number" id="L1" value="11600" required>
-
-      <label for="L2">Длина плазмиды capsid AAV (bp):</label>
-      <input type="number" id="L2" value="7300" required>
-
-      <label for="L3">Длина плазмиды AAV pITR (bp):</label>
-      <input type="number" id="L3" value="7000" required>
-
-      <label for="M1">Молярное соотношение pAAV-Helper:</label>
-      <input type="number" id="M1" value="1" required>
-
-      <label for="M2">Молярное соотношение capsid AAV:</label>
-      <input type="number" id="M2" value="1" required>
-
-      <label for="M3">Молярное соотношение AAV pITR:</label>
-      <input type="number" id="M3" value="1" required>
-
-      <label for="working_volume">Объем наработки (кол-во флаконов):</label>
-      <input type="number" id="working_volume" value="1" required>
-
-      <label for="flask_type">Тип флакона:</label>
-      <select id="flask_type">
-        <option value="1">T175</option>
-        <option value="0.6">КРУГЛЫЕ10СМ</option>
-        <option value="18">5-level cellstack</option>
-        <option value="36">10-level cellstack</option>
-      </select>
-
       <label for="conc1">Концентрация pAAV-Helper (мкг/мкл):</label>
       <input type="number" id="conc1" required>
 
@@ -104,14 +75,6 @@
 
   <script>
     function calculate() {
-      const L1 = parseFloat(document.getElementById("L1").value);
-      const L2 = parseFloat(document.getElementById("L2").value);
-      const L3 = parseFloat(document.getElementById("L3").value);
-      const M1 = parseFloat(document.getElementById("M1").value);
-      const M2 = parseFloat(document.getElementById("M2").value);
-      const M3 = parseFloat(document.getElementById("M3").value);
-      const working_volume = parseFloat(document.getElementById("working_volume").value);
-      const K = parseFloat(document.getElementById("flask_type").value);
       const conc1 = parseFloat(document.getElementById("conc1").value);
       const conc2 = parseFloat(document.getElementById("conc2").value);
       const conc3 = parseFloat(document.getElementById("conc3").value);
@@ -119,41 +82,38 @@
       const DNA_per_ml = 1.5;
       const medium_per_flask = 30;
       const PEI_to_DNA = 3;
+      const TF_mixture_volume_per_flask = 3;
 
-      const V1 = (L1 * 660) / 1e6 * M1;
-      const V2 = (L2 * 660) / 1e6 * M2;
-      const V3 = (L3 * 660) / 1e6 * M3;
-      const total_plasmid = working_volume * K * DNA_per_ml * medium_per_flask;
-      const total_PEI = total_plasmid * PEI_to_DNA;
-      const medium_for_PEI = total_PEI * 1.5;
-      const coefficient = total_plasmid / (V1 + V2 + V3);
-      const Volume1 = (coefficient * V1) / conc1;
-      const Volume2 = (coefficient * V2) / conc2;
-      const Volume3 = (coefficient * V3) / conc3;
+      const Volume1 = 20 / conc1;  
+      const Volume2 = 15 / conc2;  
+      const Volume3 = 18 / conc3;  
       const total_plasmid_volume = Volume1 + Volume2 + Volume3;
-      const medium_for_DNA = total_plasmid_volume * 1.5;
+      
+      const medium_for_DNA = (TF_mixture_volume_per_flask / 2 - total_plasmid_volume * 0.001);
+      const medium_for_PEI = (TF_mixture_volume_per_flask / 2 - 50 * 0.001);
+      const DMEM_per_dish = (medium_for_DNA + total_plasmid_volume * 0.001 + medium_for_PEI + 50 * 0.001);
+      const total_mix_theoretical = TF_mixture_volume_per_flask;
 
       document.getElementById("results").innerHTML = `
         <table>
           <tr><th>Параметр</th><th>Значение</th></tr>
-          <tr><td>Суммарное количество PEI</td><td>${total_PEI.toFixed(2)} мкл</td></tr>
-          <tr><td>Среда для PEI</td><td>${medium_for_PEI.toFixed(2)} мкл</td></tr>
+          <tr><td>Суммарное количество PEI</td><td>50 мкл</td></tr>
+          <tr><td>Среда для PEI</td><td>${medium_for_PEI.toFixed(2)} мл</td></tr>
         </table>
 
         <br>
 
         <table>
           <tr><th>Параметр</th><th>Значение</th></tr>
-          <tr><td>Среда для ДНК</td><td>${medium_for_DNA.toFixed(2)} мкл</td></tr>
+          <tr><td>Среда для ДНК</td><td>${medium_for_DNA.toFixed(2)} мл</td></tr>
           <tr><td>Объем pAAV-Helper</td><td>${Volume1.toFixed(2)} мкл</td></tr>
           <tr><td>Объем capsid AAV</td><td>${Volume2.toFixed(2)} мкл</td></tr>
           <tr><td>Объем AAV pITR</td><td>${Volume3.toFixed(2)} мкл</td></tr>
         </table>
 
         <br>
-        Кол-во ДНК на 1 мл КЖ: 1.5 мкг<br>
-        Соотношение PEI/DNA: 3 мкг/мкл<br>
-        Объем ТФ смеси на флакон Т175: 3 мл
+        Объем микса с DMEM на чашку: ${DMEM_per_dish.toFixed(2)} мл<br>
+        Суммарно микс занимает объем: ${total_mix_theoretical.toFixed(2)} мл
       `;
     }
   </script>
