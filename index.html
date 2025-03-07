@@ -10,6 +10,7 @@
     table, th, td { border: 1px solid black; }
     th, td { padding: 10px; text-align: center; }
     label, input, select { margin-bottom: 10px; }
+    .result-container { margin-top: 20px; }
   </style>
 </head>
 <body>
@@ -80,6 +81,12 @@
 <table id="results-DNA">
   <tr><th>Параметр</th><th>Значение</th></tr>
 </table>
+
+<!-- Новая секция для вывода информации об объеме микса -->
+<div class="result-container">
+  <h3>Объем микса</h3>
+  <p id="mix-summary"></p>
+</div>
 
 <script>
   // Функция для расчета
@@ -156,7 +163,13 @@
       <tr><td>Объем pAAV-Helper</td><td>${(Volume1).toFixed(2)} мкл</td></tr>
       <tr><td>Объем capsid AAV</td><td>${(Volume2).toFixed(2)} мкл</td></tr>
       <tr><td>Объем AAV pITR</td><td>${(Volume3).toFixed(2)} мкл</td></tr>
-      <tr><td>Объем микса с DMEM на чашку</td><td>${(DMEM_per_dish).toFixed(2)} мл</td></tr>
+    `;
+
+    // Выводим информацию о миксе с DMEM
+    const mixSummary = document.getElementById("mix-summary");
+    mixSummary.innerHTML = `
+      <p>Объем микса с DMEM на чашку: ${DMEM_per_dish.toFixed(2)} мл</p>
+      <p>Суммарно микс занимает объем: ${(working_volume * K * 3 / 2).toFixed(2)} мл</p>
     `;
   }
 
