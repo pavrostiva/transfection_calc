@@ -1,3 +1,3 @@
 # Transfection Calculator
 
-This project helps calculate transfection parameters.
+Расчет трансфекции AAV

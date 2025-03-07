@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Расчет плазмид и PEI для трансфекции</title>
+  <title>Расчет трансфекции AAV</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -47,21 +47,21 @@
     <h1>Расчет плазмид и PEI для трансфекции</h1>
     <form id="calculator">
       <label for="L1">Длина плазмиды pAAV-Helper (bp):</label>
-      <input type="number" id="L1" value="11635" required>
+      <input type="number" id="L1" value="11600" required>
 
-      <label for="L2">Длина плазмиды AAV2/6 (bp):</label>
-      <input type="number" id="L2" value="8369" required>
+      <label for="L2">Длина плазмиды capsid AAV (bp):</label>
+      <input type="number" id="L2" value="7300" required>
 
-      <label for="L3">Длина плазмиды AAV-CMV-EGFP (bp):</label>
-      <input type="number" id="L3" value="7285" required>
+      <label for="L3">Длина плазмиды AAV pITR (bp):</label>
+      <input type="number" id="L3" value="7000" required>
 
       <label for="M1">Молярное соотношение pAAV-Helper:</label>
       <input type="number" id="M1" value="1" required>
 
-      <label for="M2">Молярное соотношение AAV2/6:</label>
+      <label for="M2">Молярное соотношение capsid AAV:</label>
       <input type="number" id="M2" value="1" required>
 
-      <label for="M3">Молярное соотношение AAV-CMV-EGFP:</label>
+      <label for="M3">Молярное соотношение AAV pITR:</label>
       <input type="number" id="M3" value="1" required>
 
       <label for="working_volume">Объем наработки (кол-во флаконов):</label>
@@ -78,10 +78,10 @@
       <label for="conc1">Концентрация pAAV-Helper (мкг/мкл):</label>
       <input type="number" id="conc1" value="1.1" required>
 
-      <label for="conc2">Концентрация AAV2/6 (мкг/мкл):</label>
+      <label for="conc2">Концентрация capsid AAV (мкг/мкл):</label>
       <input type="number" id="conc2" value="2.335" required>
 
-      <label for="conc3">Концентрация AAV-CMV-EGFP (мкг/мкл):</label>
+      <label for="conc3">Концентрация AAV pITR (мкг/мкл):</label>
       <input type="number" id="conc3" value="1.01" required>
 
       <button type="button" onclick="calculate()">Рассчитать</button>
@@ -128,9 +128,9 @@
 ` +
         `Объем pAAV-Helper: ${Volume1.toFixed(2)} мкл
 ` +
-        `Объем AAV2/6: ${Volume2.toFixed(2)} мкл
+        `Объем capsid AAV: ${Volume2.toFixed(2)} мкл
 ` +
-        `Объем AAV-CMV-EGFP: ${Volume3.toFixed(2)} мкл
+        `Объем AAV pITR: ${Volume3.toFixed(2)} мкл
 
 ` +
         `Принципы расчета:
