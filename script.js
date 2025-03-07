@@ -1,6 +1,11 @@
 async function runPythonCode() {
-    await loadPyodide(); // Загружаем Pyodide
+    console.log("Запуск расчета...");
 
+    // Загружаем Pyodide
+    await loadPyodide();
+    console.log("Pyodide загружен");
+
+    // Чтение значений с формы
     const L1 = parseFloat(document.getElementById('L1').value);
     const L2 = parseFloat(document.getElementById('L2').value);
     const L3 = parseFloat(document.getElementById('L3').value);
@@ -12,6 +17,10 @@ async function runPythonCode() {
     const conc1 = parseFloat(document.getElementById('conc1').value);
     const conc2 = parseFloat(document.getElementById('conc2').value);
     const conc3 = parseFloat(document.getElementById('conc3').value);
+
+    console.log("Данные формы:", {
+        L1, L2, L3, M1, M2, M3, working_volume, flask_type, conc1, conc2, conc3
+    });
 
     const pythonCode = `
 import math
@@ -99,32 +108,28 @@ totalMixVolume = f"Суммарно микс занимает объем: {round
 
 (results_PEI, results_plasmids, mixVolume, totalMixVolume)
     `;
-  
-    const results = await pyodide.runPython(pythonCode);
-    const resultsPEI = JSON.parse(results)[0];
-    const resultsPlasmids = JSON.parse(results)[1];
-    const mixVolume = JSON.parse(results)[2];
-    const totalMixVolume = JSON.parse(results)[3];
 
-    // Update the HTML with the results
-    const peTable = document.getElementById("resultsPEI").getElementsByTagName('tbody')[0];
-    peTable.innerHTML = "";
-    for (const key in resultsPEI) {
-        const row = peTable.insertRow();
-        row.insertCell(0).textContent = key;
-        row.insertCell(1).textContent = resultsPEI[key];
-    }
+    let result = await pyodide.runPython(pythonCode);
 
-    const plasmidsTable = document.getElementById("resultsPlasmids").getElementsByTagName('tbody')[0];
-    plasmidsTable.innerHTML = "";
-    for (const key in resultsPlasmids) {
-        const row = plasmidsTable.insertRow();
-        row.insertCell(0).textContent = key;
-        row.insertCell(1).textContent = resultsPlasmids[key];
-    }
+    console.log("Результаты расчета:", result);
 
-    document.getElementById('mixVolume').textContent = mixVolume;
-    document.getElementById('totalMixVolume').textContent = totalMixVolume;
+    // Отображаем результаты на странице
+    const resultsPEI = document.getElementById("resultsPEI").querySelector("tbody");
+    resultsPEI.innerHTML = `
+        <tr><td>Суммарное количество PEI</td><td>${result[0]["Суммарное количество PEI"]}</td></tr>
+        <tr><td>Среда для PEI</td><td>${result[0]["Среда для PEI"]}</td></tr>
+    `;
+    
+    const resultsPlasmids = document.getElementById("resultsPlasmids").querySelector("tbody");
+    resultsPlasmids.innerHTML = `
+        <tr><td>Среда для ДНК</td><td>${result[1]["Среда для ДНК"]}</td></tr>
+        <tr><td>Объем pAAV-Helper</td><td>${result[1]["Объем pAAV-Helper"]}</td></tr>
+        <tr><td>Объем capsid AAV</td><td>${result[1]["Объем capsid AAV"]}</td></tr>
+        <tr><td>Объем AAV pITR</td><td>${result[1]["Объем AAV pITR"]}</td></tr>
+    `;
+    
+    document.getElementById("mixVolume").innerText = result[2];
+    document.getElementById("totalMixVolume").innerText = result[3];
 }
 
-document.getElementById('calculateButton').addEventListener('click', runPythonCode);
+document.getElementById("calculateButton").addEventListener("click", runPythonCode);
