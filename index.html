@@ -43,17 +43,16 @@
     <input type="number" id="M3" value="1" step="any" required>
   </div>
   <div>
-    <label for="working_volume">Объем наработки (кол-во флаконов при адгезии или мл среды в суспензии):</label>
+    <label for="working_volume">Объем наработки (кол-во флаконов):</label>
     <input type="number" id="working_volume" value="1" required>
   </div>
   <div>
     <label for="flask_type">Тип флакона:</label>
     <select id="flask_type">
       <option value="T175">T175</option>
-      <option value="Круглые10см">Круглые10см</option>
+      <option value="КРУГЛЫЕ10СМ">КРУГЛЫЕ10СМ</option>
       <option value="5-level cellstack">5-level cellstack</option>
       <option value="10-level cellstack">10-level cellstack</option>
-      <option value="Суспензия">Суспензия</option>
     </select>
   </div>
   <div>
@@ -108,11 +107,9 @@
     // Устанавливаем коэффициент K в зависимости от типа флакона
     let K = 1;
     if (flask_type === "T175") K = 1;
-    else if (flask_type === "КРУГЛЫЕ10СМ") K = 0.6;
+    else if (flask_type === "КРУГЛЫЕ10СМ") K = 0.3;
     else if (flask_type === "5-level cellstack") K = 18;
     else if (flask_type === "10-level cellstack") K = 36;
-    else if (flask_type === "Суспензия") K = 1/30;
-
 
     // Молекулярная масса (рассчитывается как длина * 660 / 10^6)
     const V1 = L1 * 660 / Math.pow(10, 6);
@@ -154,27 +151,25 @@
     const DMEM_per_dish = (media_for_DNA + total_plasmid_volume * 0.001 + media_for_PEI + total_PEI * 0.001) / working_volume;
 
     // Отображаем результаты
-        const resultsPEI = document.getElementById("results-PEI");
+    const resultsPEI = document.getElementById("results-PEI");
     resultsPEI.innerHTML = `
-      <p>Расчет для адгезионных HEK293</p>
       <tr><td>Суммарное количество PEI</td><td>${(total_PEI).toFixed(2)} мкл</td></tr>
-      <tr><td>Среда для PEI</td><td>${(media_for_PEI).toFixed(2)} мл</td></tr>
+      <tr><td>Среда для PEI</td><td>${(media_for_PEI).toFixed(2)} мкл</td></tr>
     `;
-    
+
     const resultsDNA = document.getElementById("results-DNA");
     resultsDNA.innerHTML = `
-      <tr><td>Объем pAAV-Helper</td><td>${(Volume1).toFixed(1)} мкл</td></tr>
-      <tr><td>Объем capsid AAV</td><td>${(Volume2).toFixed(1)} мкл</td></tr>
-      <tr><td>Объем AAV pITR</td><td>${(Volume3).toFixed(1)} мкл</td></tr>
-      <tr><td>Среда для ДНК</td><td>${(media_for_DNA).toFixed(1)} мл</td></tr>
+      <tr><td>Среда для ДНК</td><td>${(media_for_DNA).toFixed(2)} мкл</td></tr>
+      <tr><td>Объем pAAV-Helper</td><td>${(Volume1).toFixed(2)} мкл</td></tr>
+      <tr><td>Объем capsid AAV</td><td>${(Volume2).toFixed(2)} мкл</td></tr>
+      <tr><td>Объем AAV pITR</td><td>${(Volume3).toFixed(2)} мкл</td></tr>
     `;
 
     // Выводим информацию о миксе с DMEM
     const mixSummary = document.getElementById("mix-summary");
     mixSummary.innerHTML = `
-      <p>Расчет для адгезионных HEK293:</p>
-      <p>Объем микса с DMEM на чашку: ${DMEM_per_dish.toFixed(1)} мл</p>
-      <p>Суммарно микс занимает объем: ${(working_volume * K * 3).toFixed(1)} мл</p>
+      <p>Объем микса с DMEM на чашку: ${DMEM_per_dish.toFixed(2)} мл</p>
+      <p>Суммарно микс занимает объем: ${(working_volume * K * 3).toFixed(2)} мл</p>
     `;
   }
 
