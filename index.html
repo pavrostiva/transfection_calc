@@ -106,7 +106,7 @@
     const conc3 = parseFloat(document.getElementById("conc3").value);
 
     // Устанавливаем коэффициент K в зависимости от типа флакона
-    let K = 1;
+    let K = 0;
     if (flask_type === "T175") K = 1;
     else if (flask_type === "КРУГЛЫЕ10СМ") K = 1/3;
     else if (flask_type === "5-level cellstack") K = 18;
@@ -151,7 +151,7 @@
     const media_for_PEI = (working_volume * K * 3 / 2 - total_PEI * 0.001);
 
     // Расчет микса
-    const DMEM_per_dish = (media_for_DNA + total_plasmid_volume * 0.001 + media_for_PEI + total_PEI * 0.001) / working_volume;
+    const DMEM_per_dish = K * 3;
 
     // Отображаем результаты
         const resultsPEI = document.getElementById("results-PEI");
@@ -174,7 +174,7 @@
     mixSummary.innerHTML = `
       <p>Расчет для адгезионных HEK293:</p>
       <p>Объем микса с DMEM на чашку: ${DMEM_per_dish.toFixed(1)} мл</p>
-      <p>Суммарно микс занимает объем: ${(working_volume * K * 3).toFixed(1)} мл</p>
+      <p>Суммарно микс занимает объем: ${(working_volume * DMEM_per_dish).toFixed(1)} мл</p>
     `;
   }
 
